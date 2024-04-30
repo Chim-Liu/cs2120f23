@@ -253,8 +253,65 @@ provide explicitly is the proof of the associativity of the
 inherited *Add.add* operation. For now, until we learn more
 about constructing proofs, we'll just "stub out" this value.
 -/
+theorem rot_add_assoc:∀ (a b c : Rotation), (a+b)+c=a+(b+c)
+| r0,b,c=>match b with
+  | r0=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
+  |r120=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
+  |r240=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
+| r120,b,c=>match b with
+ | r0=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
+  |r120=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
+  |r240=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
+| r240,b,c=>match b with
+ | r0=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
+  |r120=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
+  |r240=>match c with
+    |r0=> rfl
+    |r120=>rfl
+    |r240=>rfl
 
-instance : AddSemigroup Rotation := { add_assoc := sorry }
+theorem rot_add_assoc_by:∀ (a b c : Rotation), (a+b)+c=a+(b+c):=
+by
+  intros a b c
+  cases a
+  repeat{
+  cases b
+  repeat{
+    cases c
+    repeat {rfl}
+    }
+  }
+
+
+
+
+
+
+instance : AddSemigroup Rotation := { add_assoc := rot_add_assoc }
 
 /-!
 #### AddMonoid
@@ -289,10 +346,19 @@ verify that *nsmul* implements n-iterated addition. At this
 point, it's thus super-easy to instantiate the AddMonoid class
 for the Rotation type.
 -/
-
+theorem rot_zero_add:∀ (a:Rotation), 0+a=a:=
+by
+  intros a
+  cases a
+  repeat{rfl}
+theorem rot_add_zero:∀ (a:Rotation), a+0=a:=
+by
+  intros a
+  cases a
+  repeat{rfl}
 instance : AddMonoid Rotation := {
-  zero_add := sorry
-  add_zero := sorry
+  zero_add := rot_zero_add
+  add_zero := rot_add_zero
 }
 
 #reduce 0 • r120              -- 0 means r0; • means *nsmul*
